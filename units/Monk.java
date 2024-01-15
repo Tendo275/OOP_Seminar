@@ -1,13 +1,21 @@
 package units;
 
-public class Monk extends HeroBase {
+import java.util.ArrayList;
+
+public class Monk extends Magician {
     public Monk(String name, int x, int y) {
-        super(name, 100, 100, 20,
-                50, 0.2, 0.2, x, y);
+        super(name, 100, 100, 5,
+                50, 3, 0.1, 0.2, x, y, true);
+        mp = 100;
     }
 
     @Override
     public String toString() {
-        return ("units.Monk: " + name + position);
+        return ("units.Monk: " + super.toString());
+    }
+
+    @Override
+    public void step(ArrayList<HeroBase> enemies) {
+        System.out.println(this + " step ");
     }
 }

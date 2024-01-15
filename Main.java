@@ -1,6 +1,7 @@
 import units.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -8,27 +9,23 @@ public class Main {
     public static void main(String[] args) {
         int numberOfTeams = 10;
         createTeams(numberOfTeams);
-        System.out.println("Lightside team:");
-        lightSide.forEach(n-> System.out.println(n.toString()));
-        System.out.println("---------------------------------------");
-        System.out.println("Darkside team:");
-        darkSide.forEach(n-> System.out.println(n.toString()));
-        System.out.println("---------------------------------------");
+        ArrayList<HeroBase> heroOrder = new ArrayList<>();
+        heroOrder.addAll(lightSide);
+        heroOrder.addAll(darkSide);
+        heroOrder.sort(Comparator.comparingInt(HeroBase::getInitiative));
 
-        for (HeroBase hero : lightSide) {
-            if (hero.getClass() == Crossbowman.class ){
-                System.out.println("For " + hero + " nearest target= " + ((Crossbowman) hero).getNearestEnemy(darkSide));
-            }
+        for (int i = 0; i < 5; i++) {
+            System.out.println("Step № " + i + "--------------------------------");
+            teemSteps(heroOrder);
         }
 
-        for (HeroBase hero : darkSide) {
-            if (hero.getClass() == Sniper.class ){
-                System.out.println("For " + hero + " nearest target= " + ((Sniper) hero).getNearestEnemy(lightSide));
-            }
+    }
+
+    static void teemSteps(ArrayList<HeroBase> order){
+        for(HeroBase hero:order){
+            if (lightSide.contains(hero)) hero.step(darkSide);
+            else hero.step(lightSide);
         }
-
-//        darkSide.forEach(n-> n.getDistance(lightSide));
-
     }
 
     static String getName() {
@@ -40,6 +37,10 @@ public class Main {
             darkSide.add(getRandomHero(random.nextInt(3,7),i,9));
             lightSide.add(getRandomHero(random.nextInt(4),i,0));
         }
+    }
+
+    static void showTeam(ArrayList<HeroBase> team){
+        team.forEach(n-> System.out.println(n.toString()));
     }
 
     static HeroBase getRandomHero(int choice, int x , int y) {
