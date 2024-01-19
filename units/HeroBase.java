@@ -32,11 +32,27 @@ abstract public class HeroBase implements Game {
         return this.initiative;
     }
 
-    protected boolean getLiveStatus(HeroBase heroBase) {
-        return heroBase.liveStatus;
+    public boolean getLiveStatus() {
+        return this.liveStatus;
     }
 
-    protected int calculateDamage(HeroBase self, HeroBase enemy) {
+    public String getType(){
+        return this.getClass().getSimpleName();
+    }
+
+    public HeroBase getNearestEnemy(ArrayList<HeroBase> enemies){
+        HeroBase nearestEnemy = null;
+        for (HeroBase enemy : enemies) {
+            if (enemy.liveStatus) {
+                if (nearestEnemy == null || position.distance(enemy.position) < position.distance(nearestEnemy.position) ) {
+                    nearestEnemy = enemy;
+                }
+            }
+        }
+        return nearestEnemy;
+    }
+
+    public int calculateDamage(HeroBase self, HeroBase enemy) {
         Random random = new Random();
         int criticalDamage = 1;
         int evaletionEffect = 1;
@@ -47,13 +63,23 @@ abstract public class HeroBase implements Game {
         return (int) ((self.damage * criticalDamage) * (100 - enemy.armor) * 0.01 / evaletionEffect);
     }
 
+
+    public void getDamage(int currentDamage){
+        if (!this.liveStatus) return;
+        this.hp -=currentDamage;
+        if (this.hp <= 0){
+            this.hp = 0;
+            this.liveStatus = false;
+        }
+    }
+
     @Override
     public String toString() {
         return (name + position + " HP= " + hp);
     }
 
     @Override
-    public void step(ArrayList<HeroBase> enemies) {
-    }
+    public void step(ArrayList<HeroBase> enemies, ArrayList<HeroBase> allies) {
 
+    }
 }

@@ -9,15 +9,24 @@ abstract class Archer extends HeroBase{
                   double criticalChance, double evasion, int x, int y, boolean liveStatus) {
         super(name, maxHp, hp, armor, damage, initiative, criticalChance, evasion, x, y, liveStatus);
     }
-    public HeroBase getNearestEnemy(ArrayList<HeroBase> enemies){
-        HeroBase nearestEnemy = enemies.getFirst();
-        float minDistance = position.distance(nearestEnemy.position);
-        for (HeroBase enemy : enemies) {
-            if (position.distance(enemy.position) < minDistance && enemy.liveStatus){
-                minDistance = position.distance(enemy.position);
-                nearestEnemy = enemy;
-            }
+
+
+    @Override
+    public void step(ArrayList<HeroBase> enemies, ArrayList<HeroBase> allies) {
+        if (!this.getLiveStatus()) {
+            System.out.println(this + " is dead and disappears from the battlefield forever ...");
+            return;
         }
-        return nearestEnemy;
+        HeroBase enemy = getNearestEnemy(enemies);
+        if (enemy == null) return;
+        if (this.arrows <1 ) {
+            System.out.println(this + " arrows is empty");
+            return;
+        }
+        this.arrows --;
+        int currentDamage = calculateDamage(this, enemy) /
+                (int) (1 + this.getDistance(enemy) / attackDistance);
+        enemy.getDamage(currentDamage);
+        System.out.println(this + " attack " + enemy + " with damage " + currentDamage);
     }
 }

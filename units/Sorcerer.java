@@ -11,11 +11,11 @@ public class Sorcerer extends Magician{
 
     @Override
     public String toString() {
-        return ("units.Sorcerer: " + super.toString());
+        return ("Sorcerer: " + super.toString());
     }
 
     @Override
-    public void step(ArrayList<HeroBase> enemies) {
+    public void step(ArrayList<HeroBase> enemies, ArrayList<HeroBase> allies) {
         System.out.println(this + " step ");
     }
 }
