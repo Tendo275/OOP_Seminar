@@ -2,10 +2,10 @@ package units;
 
 import java.util.ArrayList;
 
-public class Peasant extends HeroBase {
-    public Peasant(String name, int x, int y) {
+public class Apprentice extends HeroBase {
+    public Apprentice(String name, int x, int y) {
         super(name, 200, 200, 0,
-                10, 4, 0, 0.2, x, y, true);
+                10, 4, 0, 0.2, x, y, true,"");
     }
 
     public ArrayList<Archer> findAllArcher(ArrayList<HeroBase> allies) {
@@ -34,13 +34,13 @@ public class Peasant extends HeroBase {
 
     @Override
     public String toString() {
-        return ("Peasant: " + super.toString());
+        return ("Apprentice " + super.toString() + " Act: " + actions);
     }
 
     @Override
     public void step(ArrayList<HeroBase> enemies, ArrayList<HeroBase> allies) {
         if (!this.getLiveStatus()) {
-            System.out.println(this + " is dead and disappears from the battlefield forever ...");
+            this.actions =  " is dead  ...";
             return;
         }
         ArrayList<Archer> alliesArchers = findAllArcher(allies);
@@ -49,12 +49,12 @@ public class Peasant extends HeroBase {
         int quantity = 1;
         if (target.getType().equals("Crossbowman")) quantity = 2;
         target.arrows += quantity;
-        System.out.println(this + " add " + quantity + " arrow(s) to " + target);
+        actions = " add " + quantity + " arrow(s) to " + target.name;
         HeroBase enemy = getNearestEnemy(enemies);
         if (enemy == null) return;
         if (this.getDistance(enemy) < 2) {
             enemy.getDamage(calculateDamage(this, enemy));
-            System.out.println(this + " attack " + enemy + " with damage " + calculateDamage(this, enemy));
+            actions = " attack " + enemy.getType() + enemy.name + " with dmg= " + calculateDamage(this, enemy);
         }
     }
 }
